@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:weather/ui/forecast/cubit/weather_cubit.dart';
 import 'package:weather/ui/forecast/widgets/afternoon_widget.dart';
 import 'package:weather/ui/forecast/widgets/carousel_template_widget.dart';
 import 'package:weather/ui/forecast/widgets/location_widget.dart';
@@ -18,6 +21,8 @@ class ForecastScreen extends StatefulWidget {
 }
 
 class _ForecastScreenState extends State<ForecastScreen> {
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   List<String> titles = ['Right now', 'This afternoon', 'This week'];
   List<String> descriptions = ['', 'Rain', 'Rain rain rain rain'];
   List<double> numbers = [
@@ -75,7 +80,9 @@ class _ForecastScreenState extends State<ForecastScreen> {
           valuesMin: numbersMin,
           valuesPer: numbersPer,
         ),
-        WeekDetailWidget(values: numbersMin,),
+        WeekDetailWidget(
+          values: numbersMin,
+        ),
       ],
     ];
   }
@@ -83,32 +90,57 @@ class _ForecastScreenState extends State<ForecastScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: CustomScrollView(
-          slivers: [
-            const SliverToBoxAdapter(
-              child: LocationWidget(),
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 20,
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) => CarouselTemplateWidget(
-                  title: titles[index],
-                  description: descriptions[index],
-                  firstWidget: widgets[index][0],
-                  secondWidget: widgets[index][1],
+      child: BlocProvider(
+        create: (context) => WeatherCubit()..getWeather(city: 'Omsk'),
+        child: BlocBuilder<WeatherCubit, WeatherState>(
+          builder: (context, state) {
+            if (state is WeatherLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (state is WeatherLoaded) {
+              return SmartRefresher(
+                controller: _refreshController,
+                enablePullDown: true,
+                onRefresh: () => context.read<WeatherCubit>().getWeather(city: 'Omsk'),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: CustomScrollView(
+                    slivers: [
+                      const SliverToBoxAdapter(
+                        child: LocationWidget(),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 20,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) => CarouselTemplateWidget(
+                            title: titles[index],
+                            description: descriptions[index],
+                            firstWidget: widgets[index][0],
+                            secondWidget: widgets[index][1],
+                          ),
+                          itemCount: titles.length,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                itemCount: titles.length,
-              ),
-            ),
-          ],
+              );
+            }
+            if (state is WeatherError) {
+              return SmartRefresher(
+                controller: _refreshController,
+                enablePullDown: true,
+                onRefresh: () => context.read<WeatherCubit>().getWeather(city: 'Omsk'),
+                child: Center(child: Text(state.error, style: const TextStyle(color: Colors.red))));
+            }
+            return const SizedBox();
+          },
         ),
       ),
     );

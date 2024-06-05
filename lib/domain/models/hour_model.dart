@@ -5,7 +5,7 @@ class Hour {
   final double tempC;
   final double tempF;
   final String icon;
-  final double humidity;
+  final int humidity;
   Hour({
     required this.time,
     required this.tempC,
