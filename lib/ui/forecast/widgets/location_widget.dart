@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:weather/domain/services/location_service.dart';
 
 class LocationWidget extends StatefulWidget {
   const LocationWidget({super.key});
@@ -25,7 +23,8 @@ class _LocationWidgetState extends State<LocationWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            GetIt.instance.get<LocationService>().locationData.toString(),
+            // GetIt.instance.get<LocationService>().locationData.toString(),
+            '',
             style: TextStyle(
               color: Colors.yellow,
               fontSize: 15,

@@ -1,30 +1,30 @@
-import 'package:location/location.dart';
+// import 'package:location/location.dart';
 
-class LocationService {
-  LocationData locationData = LocationData.fromMap({});
-  Future<LocationData?> getCurrentLocation() async {
-    Location location = Location();
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-    LocationData locationData;
+// class LocationService {
+//   LocationData locationData = LocationData.fromMap({});
+//   Future<LocationData?> getCurrentLocation() async {
+//     Location location = Location();
+//     bool serviceEnabled;
+//     PermissionStatus permissionGranted;
+//     LocationData locationData;
 
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return null;
-      }
-    }
+//     serviceEnabled = await location.serviceEnabled();
+//     if (!serviceEnabled) {
+//       serviceEnabled = await location.requestService();
+//       if (!serviceEnabled) {
+//         return null;
+//       }
+//     }
 
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return null;
-      }
-    }
+//     permissionGranted = await location.hasPermission();
+//     if (permissionGranted == PermissionStatus.denied) {
+//       permissionGranted = await location.requestPermission();
+//       if (permissionGranted != PermissionStatus.granted) {
+//         return null;
+//       }
+//     }
 
-    locationData = await location.getLocation();
-    return locationData;
-  }
-}
+//     locationData = await location.getLocation();
+//     return locationData;
+//   }
+// }

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:weather/domain/services/location_service.dart';
 import 'package:weather/ui/main_page.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  LocationService locationService = LocationService();
-  GetIt.I.registerSingleton<LocationService>(locationService);
-  locationService.getCurrentLocation();
+  // WidgetsFlutterBinding.ensureInitialized();
+  //
+  // LocationService locationService = LocationService();
+  // GetIt.I.registerSingleton<LocationService>(locationService);
+  // locationService.getCurrentLocation();
   runApp(const MyApp());
 }
 
