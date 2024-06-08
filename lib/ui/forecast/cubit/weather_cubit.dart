@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:weather/domain/models/current_day_model.dart';
@@ -11,10 +12,17 @@ class WeatherCubit extends Cubit<WeatherState> {
   void getWeather({String city = 'Omsk'}) async {
     try {
       emit(WeatherLoading());
-      CurrentDay? data = await GetIt.instance
+      CurrentDay data = (await GetIt.instance
           .get<NetworkService>()
-          .getCurrentDay(q: city);
-      emit(WeatherLoaded(currentDayModel: data!));
+          .getCurrentDay(q: city))!;
+      data.hours.removeWhere((element) => element.time.hour < TimeOfDay.now().hour);
+      if(data.hours.length < 16) {
+        int val = 16 - data.hours.length;
+        for(int i = 0; i < val; i++) {
+          data.hours.add(data.week[1].hours[i]);
+        }
+      }
+      emit(WeatherLoaded(currentDay: data));
     } catch (e) {
       emit(WeatherError(error: 'Данные о погоде не найдены'));
     }

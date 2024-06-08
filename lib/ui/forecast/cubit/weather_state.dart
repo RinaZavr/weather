@@ -5,9 +5,9 @@ sealed class WeatherState {}
 final class WeatherInitial extends WeatherState {}
 final class WeatherLoading extends WeatherState {}
 final class WeatherLoaded extends WeatherState {
-  final CurrentDay currentDayModel;
+  final CurrentDay currentDay;
   WeatherLoaded({
-    required this.currentDayModel
+    required this.currentDay
   });
 }
 final class WeatherError extends WeatherState {

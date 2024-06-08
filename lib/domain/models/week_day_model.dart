@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:weather/domain/models/hour_model.dart';
 
 class WeekDay {
   final DateTime date;
@@ -17,6 +18,7 @@ class WeekDay {
   final TimeOfDay sunrise;
   final TimeOfDay sunset;
   final String moonPhase;
+  final List<Hour> hours;
   WeekDay({
     required this.date,
     required this.maxTempC,
@@ -31,6 +33,7 @@ class WeekDay {
     required this.sunrise,
     required this.sunset,
     required this.moonPhase,
+    required this.hours,
   });
 
   WeekDay.fromJson(Map<String, dynamic> json)
@@ -46,5 +49,6 @@ class WeekDay {
         humidity = json['day']['avghumidity'],
         sunrise = TimeOfDay.fromDateTime(DateFormat("h:mm a").parse(json['astro']['sunrise'])),
         sunset = TimeOfDay.fromDateTime(DateFormat("h:mm a").parse(json['astro']['sunset'])),
-        moonPhase = json['astro']['moon_phase'];
+        moonPhase = json['astro']['moon_phase'],
+        hours = (json['hour'] as List).map((e) => Hour.fromJson(e)).toList();
 }

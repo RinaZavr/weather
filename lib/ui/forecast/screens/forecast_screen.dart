@@ -12,6 +12,7 @@ import 'package:weather/ui/forecast/widgets/now_max_info_widget.dart';
 import 'package:weather/ui/forecast/widgets/now_min_info_widget.dart';
 import 'package:weather/ui/forecast/widgets/week_detail_widget.dart';
 import 'package:weather/ui/forecast/widgets/week_widget.dart';
+import 'package:weather/utils/utils.dart';
 
 class ForecastScreen extends StatefulWidget {
   const ForecastScreen({super.key});
@@ -23,124 +24,102 @@ class ForecastScreen extends StatefulWidget {
 class _ForecastScreenState extends State<ForecastScreen> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  List<String> titles = ['Right now', 'This afternoon', 'This week'];
-  List<String> descriptions = ['', 'Rain', 'Rain rain rain rain'];
-  List<double> numbers = [
-    26,
-    26,
-    25,
-    25,
-    25,
-    24,
-    23,
-    21,
-    20,
-    19,
-    18,
-    17,
-    16,
-    16,
-    16,
-    16
-  ];
-  List<double> numbersMin = [
-    9,
-    16,
-    14,
-    12,
-    11,
-    12,
-    12,
-    13,
-  ];
-  List<double> numbersPer = [40, 65, 65, 40, 45, 50, 45, 40];
-  double average = 0;
   late List<List<Widget>> widgets;
+  List<String> titles = ['Right now', 'This afternoon', 'This week'];
 
   @override
   void initState() {
     super.initState();
-    widgets = [
-      [
-        const NowMinInfoWidget(),
-        const NowMaxInfoWidget(),
-      ],
-      [
-        AfternoonWidget(
-            values: numbers.getRange(0, 8).toList(), max: numbers.reduce(max)),
-        AfternoonWidget(
-            values: numbers.getRange(8, numbers.length).toList(),
-            max: numbers.reduce(max)),
-      ],
-      [
-        WeekWidget(
-          maxVal: numbers.reduce(max),
-          maxPer: numbersPer.reduce(max),
-          values: numbers.getRange(0, 8).toList(),
-          valuesMin: numbersMin,
-          valuesPer: numbersPer,
-        ),
-        WeekDetailWidget(
-          values: numbersMin,
-        ),
-      ],
-    ];
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: BlocProvider(
-        create: (context) => WeatherCubit()..getWeather(city: 'Omsk'),
-        child: BlocBuilder<WeatherCubit, WeatherState>(
-          builder: (context, state) {
-            if (state is WeatherLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state is WeatherLoaded) {
-              return SmartRefresher(
-                controller: _refreshController,
-                enablePullDown: true,
-                onRefresh: () => context.read<WeatherCubit>().getWeather(city: 'Omsk'),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: CustomScrollView(
-                    slivers: [
-                      const SliverToBoxAdapter(
-                        child: LocationWidget(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          
+          backgroundColor: Colors.transparent,
+          title: const LocationWidget(),
+        ),
+        body: BlocProvider(
+          create: (context) => WeatherCubit()..getWeather(city: 'Omsk'),
+          child: BlocBuilder<WeatherCubit, WeatherState>(
+            builder: (context, state) {
+              if (state is WeatherLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is WeatherLoaded) {
+                widgets = [
+                  [
+                    NowMinInfoWidget(
+                      day: state.currentDay,
+                    ),
+                    NowMaxInfoWidget(
+                      day: state.currentDay,
+                      sunrise: state.currentDay.week[0].sunrise,
+                      sunset: state.currentDay.week[0].sunset,
+                    ),
+                  ],
+                  [
+                    AfternoonWidget(
+                      maxTemp: Utils.getMaxTemp(state.currentDay.hours),
+                      maxHumidity: Utils.getMaxHumidity(state.currentDay.hours),
+                      hours: state.currentDay.hours.getRange(0, 8).toList(),
+                    ),
+                    AfternoonWidget(
+                      maxTemp: Utils.getMaxTemp(state.currentDay.hours),
+                      maxHumidity: Utils.getMaxHumidity(state.currentDay.hours),
+                      hours: state.currentDay.hours
+                          .getRange(8, state.currentDay.hours.length)
+                          .toList(),
+                    ),
+                  ],
+                  [
+                    WeekWidget(
+                      week: state.currentDay.week,
+                    ),
+                    WeekDetailWidget(
+                      week: state.currentDay.week,
+                    ),
+                  ],
+                ];
+                return SmartRefresher(
+                  controller: _refreshController,
+                  enablePullDown: true,
+                  onRefresh: () =>
+                      context.read<WeatherCubit>().getWeather(city: 'Omsk'),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ListView.builder(
+                      itemBuilder: (context, index) => CarouselTemplateWidget(
+                        title: titles[index],
+                        description: [
+                          '',
+                          '${state.currentDay.week[0].description}.',
+                          '${Utils.getWeekDescription(state.currentDay.week)}.'
+                        ][index],
+                        firstWidget: widgets[index][0],
+                        secondWidget: widgets[index][1],
                       ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 20,
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) => CarouselTemplateWidget(
-                            title: titles[index],
-                            description: descriptions[index],
-                            firstWidget: widgets[index][0],
-                            secondWidget: widgets[index][1],
-                          ),
-                          itemCount: titles.length,
-                        ),
-                      ),
-                    ],
+                      itemCount: titles.length,
+                    ),
                   ),
-                ),
-              );
-            }
-            if (state is WeatherError) {
-              return SmartRefresher(
-                controller: _refreshController,
-                enablePullDown: true,
-                onRefresh: () => context.read<WeatherCubit>().getWeather(city: 'Omsk'),
-                child: Center(child: Text(state.error, style: const TextStyle(color: Colors.red))));
-            }
-            return const SizedBox();
-          },
+                );
+              }
+              if (state is WeatherError) {
+                return SmartRefresher(
+                    controller: _refreshController,
+                    enablePullDown: true,
+                    onRefresh: () =>
+                        context.read<WeatherCubit>().getWeather(city: 'Omsk'),
+                    child: Center(
+                        child: Text(state.error,
+                            style: const TextStyle(color: Colors.red))));
+              }
+              return const SizedBox();
+            },
+          ),
         ),
       ),
     );

@@ -15,6 +15,9 @@ class CurrentDay {
   final double feelslikeF;
   final double dewpointC;
   final double dewPointF;
+  final double visKm;
+  final double visMiles;
+  final double uv;
   final List<Hour> hours;
   final List<WeekDay> week;
   CurrentDay({
@@ -31,6 +34,9 @@ class CurrentDay {
     required this.feelslikeF,
     required this.dewpointC,
     required this.dewPointF,
+    required this.visKm,
+    required this.visMiles,
+    required this.uv,
     required this.hours,
     required this.week,
   });
@@ -49,6 +55,9 @@ class CurrentDay {
         feelslikeF = json['current']['feelslike_f'],
         dewpointC = json['current']['dewpoint_c'],
         dewPointF = json['current']['dewpoint_f'],
+        visKm = json['current']['vis_km'],
+        visMiles = json['current']['vis_miles'],
+        uv = json['current']['uv'],
         hours = (json['forecast']['forecastday'][0]['hour'] as List).map((hour) => Hour.fromJson(hour)).toList(),
         week = (json['forecast']['forecastday'] as List).map((week) => WeekDay.fromJson(week)).toList();
 }

@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:weather/domain/models/week_day_model.dart';
+import 'package:weather/ui/forecast/widgets/image_widget.dart';
+import 'package:weather/utils/consts/color_consts.dart';
 
 class WeekWidget extends StatefulWidget {
-  final double maxVal;
-  final double maxPer;
-  final List<double> values;
-  final List<double> valuesMin;
-  final List<double> valuesPer;
+  final List<WeekDay> week;
   const WeekWidget({
     super.key,
-    required this.maxVal,
-    required this.maxPer,
-    required this.values,
-    required this.valuesMin,
-    required this.valuesPer,
+    required this.week,
   });
 
   @override
@@ -23,121 +18,128 @@ class WeekWidget extends StatefulWidget {
 class _WeekWidgetState extends State<WeekWidget> {
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxHeight: 350),
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2 - 45),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 2),
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    height: 300 / 8,
-                    width: widget.valuesPer[index] + 38,
-                    decoration: BoxDecoration(
-                      color: Colors.yellow[300],
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${widget.valuesPer[index].toStringAsFixed(0)}%',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 350),
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width / 2 - 45),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      height: 300 / 8,
+                      width: widget.week[index].humidity + 38,
+                      decoration: const BoxDecoration(
+                        color: ColorConsts.blue,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
                         ),
-                        const Icon(Icons.circle, color: Colors.white, size: 30),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 45,
-                child: Column(
-                  children: [
-                    Text(
-                      'WED',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
                       ),
-                    ),
-                    Text(
-                      '5',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2 - 45),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 2),
-                    height: 300 / 8,
-                    width: widget.values[index] * 3 + 38,
-                    decoration: BoxDecoration(
-                      color: Colors.yellow[300],
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          color: Colors.yellow[600],
-                          height: 300 / 8,
-                          width: 30,
-                          child: Text(
-                            '${widget.valuesMin[index].toStringAsFixed(0)}°',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 4),
-                          child: Text(
-                            '${widget.values[index].toStringAsFixed(0)}°',
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${widget.week[index].humidity.toStringAsFixed(0)}%',
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ),
-                      ],
+                          ImageWidget(icon: widget.week[index].icon, width: 30),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
-        itemCount: 8,
-        physics: const NeverScrollableScrollPhysics(),
+                SizedBox(
+                  width: 45,
+                  child: Column(
+                    children: [
+                      Text(
+                        DateFormat('EEE')
+                            .format(widget.week[index].date)
+                            .toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        widget.week[index].date.day.toString(),
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width / 2 - 45),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 2),
+                      height: 300 / 8,
+                      width: widget.week[index].minTempC * 4 + 38,
+                      decoration: const BoxDecoration(
+                        color: ColorConsts.yellow,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            color: ColorConsts.darkYellow,
+                            height: 300 / 8,
+                            width: 30,
+                            child: Text(
+                              '${widget.week[index].minTempC.toStringAsFixed(0)}°',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: Text(
+                              '${widget.week[index].maxTempC.toStringAsFixed(0)}°',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          itemCount: 8,
+          physics: const NeverScrollableScrollPhysics(),
+        ),
       ),
     );
   }
