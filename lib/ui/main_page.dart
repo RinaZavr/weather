@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather/ui/forecast/screens/forecast_screen.dart';
 import 'package:weather/ui/location/screens/location_screen.dart';
 import 'package:weather/ui/settings/screens/settings_screen.dart';
+import 'package:weather/utils/consts/color_consts.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -26,9 +27,9 @@ class _MainPageState extends State<MainPage> {
       body: pages.elementAt(selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
-        selectedItemColor: Colors.yellow,
-        unselectedItemColor: Colors.grey,
-        backgroundColor: const Color.fromARGB(137, 39, 39, 39),
+        selectedItemColor: AppColors.yellow,
+        unselectedItemColor: AppColors.grey,
+        backgroundColor: AppColors.darkGrey,
         onTap: _onTap,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

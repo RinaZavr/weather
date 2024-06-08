@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:weather/domain/models/current_day_model.dart';
-import 'package:weather/ui/forecast/widgets/image_widget.dart';
 import 'package:weather/utils/utils.dart';
 
 class NowMaxInfoWidget extends StatelessWidget {

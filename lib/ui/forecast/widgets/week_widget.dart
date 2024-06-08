@@ -38,7 +38,7 @@ class _WeekWidgetState extends State<WeekWidget> {
                       height: 300 / 8,
                       width: widget.week[index].humidity + 38,
                       decoration: const BoxDecoration(
-                        color: ColorConsts.blue,
+                        color: AppColors.blue,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10),
                           bottomLeft: Radius.circular(10),
@@ -94,7 +94,7 @@ class _WeekWidgetState extends State<WeekWidget> {
                       height: 300 / 8,
                       width: widget.week[index].minTempC * 4 + 38,
                       decoration: const BoxDecoration(
-                        color: ColorConsts.yellow,
+                        color: AppColors.yellow,
                         borderRadius: BorderRadius.only(
                           topRight: Radius.circular(10),
                           bottomRight: Radius.circular(10),
@@ -105,7 +105,7 @@ class _WeekWidgetState extends State<WeekWidget> {
                         children: [
                           Container(
                             alignment: Alignment.center,
-                            color: ColorConsts.darkYellow,
+                            color: AppColors.darkYellow,
                             height: 300 / 8,
                             width: 30,
                             child: Text(

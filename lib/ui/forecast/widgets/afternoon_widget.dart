@@ -39,7 +39,7 @@ class _AfternoonWidgetState extends State<AfternoonWidget> {
                   height: hour.tempC * 2,
                   width: MediaQuery.of(context).size.width / 8 - 6,
                   decoration: const BoxDecoration(
-                    color: ColorConsts.yellow,
+                    color: AppColors.yellow,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10),
@@ -75,7 +75,7 @@ class _AfternoonWidgetState extends State<AfternoonWidget> {
                   height: hour.humidity / 3 + 50,
                   width: MediaQuery.of(context).size.width / 8 - 6,
                   decoration: const BoxDecoration(
-                    color: ColorConsts.blue,
+                    color: AppColors.blue,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(10),
                       bottomRight: Radius.circular(10),

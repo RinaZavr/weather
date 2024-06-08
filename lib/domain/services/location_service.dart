@@ -1,30 +1,35 @@
-// import 'package:location/location.dart';
+import 'package:location/location.dart';
 
-// class LocationService {
-//   LocationData locationData = LocationData.fromMap({});
-//   Future<LocationData?> getCurrentLocation() async {
-//     Location location = Location();
-//     bool serviceEnabled;
-//     PermissionStatus permissionGranted;
-//     LocationData locationData;
+class LocationService {
+  LocationData locationData = LocationData.fromMap({});
+  Location location = Location();
 
-//     serviceEnabled = await location.serviceEnabled();
-//     if (!serviceEnabled) {
-//       serviceEnabled = await location.requestService();
-//       if (!serviceEnabled) {
-//         return null;
-//       }
-//     }
+  Future<LocationData> getCurrentLocation() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
 
-//     permissionGranted = await location.hasPermission();
-//     if (permissionGranted == PermissionStatus.denied) {
-//       permissionGranted = await location.requestPermission();
-//       if (permissionGranted != PermissionStatus.granted) {
-//         return null;
-//       }
-//     }
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return LocationData.fromMap(
+            {'latitude': 55.0373056, 'longitude': 73.2672704});
+      }
+    }
 
-//     locationData = await location.getLocation();
-//     return locationData;
-//   }
-// }
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return LocationData.fromMap(
+            {'latitude': 55.0373056, 'longitude': 73.2672704});
+      }
+    }
+
+    locationData = await location.getLocation();
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      locationData = currentLocation;
+    });
+    return locationData;
+  }
+}
