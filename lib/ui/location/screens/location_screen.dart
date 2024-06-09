@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:weather/domain/models/location_model.dart';
@@ -17,6 +19,7 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   String search = '';
   bool isEdit = false;
+  bool canEdit = true;
   List<Location> savedLocations = [];
   SearchCubit searchCubit = SearchCubit();
   FocusNode focusNode = FocusNode();
@@ -34,17 +37,19 @@ class _LocationScreenState extends State<LocationScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         leadingWidth: 60,
-        leading: TextButton(
-          onPressed: () {
-            setState(() {
-              isEdit = !isEdit;
-            });
-          },
-          child: Text(
-            isEdit ? 'Done' : 'Edit',
-            style: const TextStyle(color: AppColors.yellow),
-          ),
-        ),
+        leading: canEdit
+            ? TextButton(
+                onPressed: () {
+                  setState(() {
+                    isEdit = !isEdit;
+                  });
+                },
+                child: Text(
+                  isEdit ? 'Done' : 'Edit',
+                  style: const TextStyle(color: AppColors.yellow),
+                ),
+              )
+            : null,
         actions: [
           if (!isEdit)
             TextButton(
@@ -88,11 +93,15 @@ class _LocationScreenState extends State<LocationScreen> {
                         onChanged: (value) {
                           setState(() {
                             search = value;
+                            if (value == '') {
+                              canEdit = true;
+                            }
                           });
                         },
                         onEditingComplete: () {
                           focusNode.unfocus();
                           if (search != '') {
+                            canEdit = false;
                             searchCubit.search(search.trim());
                           }
                         },
@@ -131,7 +140,8 @@ class _LocationScreenState extends State<LocationScreen> {
                             shrinkWrap: true,
                             itemBuilder: (context, index) => GestureDetector(
                               onTap: () {
-                                GetIt.instance<RepositorySP>().addLocation(state.cities[index]);
+                                GetIt.instance<RepositorySP>()
+                                    .addLocation(state.cities[index]);
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -164,21 +174,45 @@ class _LocationScreenState extends State<LocationScreen> {
                         }
                         return Column(
                           children: [
-                            _buildRowLocation(
-                                location: 'Your current location',
-                                icon: Icons.location_searching),
-                            if(savedLocations.isNotEmpty)
-                            ListView.builder(
-                              shrinkWrap: true,
-                              itemBuilder: 
-                              (context, index) => Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                child: _buildRowLocation(
-                                  location: savedLocations[index].name,
-                                ),
+                            _buildCurLocation(),
+                            if (savedLocations.isNotEmpty)
+                              isEdit ? ReorderableListView(
+                                shrinkWrap: true,
+                                children: [
+                                  for (Location item in savedLocations)
+                                    _buildRowLocation(location: item),
+                                ],
+                                onReorder: (start, current) {
+                                    if (start < current) {
+                                      int end = current - 1;
+                                      Location startItem =
+                                          savedLocations[start];
+                                      int i = 0;
+                                      int local = start;
+                                      do {
+                                        savedLocations[local] =
+                                            savedLocations[++local];
+                                        i++;
+                                      } while (i < end - start);
+                                      savedLocations[end] = startItem;
+                                    } else if (start > current) {
+                                      Location startItem =
+                                          savedLocations[start];
+                                      for (int i = start; i > current; i--) {
+                                        savedLocations[i] =
+                                            savedLocations[i - 1];
+                                      }
+                                      savedLocations[current] = startItem;
+                                    }
+                                    GetIt.instance<RepositorySP>().setLocations(savedLocations);
+                                    setState(() {});
+                                  }
+                              ) : Column(
+                                children: [
+                                  for (Location item in savedLocations)
+                                    _buildRowLocation(location: item),
+                                ],
                               ),
-                              itemCount: savedLocations.length,
-                            )
                           ],
                         );
                       },
@@ -193,21 +227,59 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 
-  Widget _buildRowLocation({required String location, IconData? icon}) {
-    return Row(
-      children: [
-        Icon(icon ?? Icons.location_on, color: AppColors.grey),
-        const SizedBox(
-          width: 10,
-        ),
-        Text(
-          location,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
+  Widget _buildCurLocation() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Icon(Icons.location_searching, color: AppColors.grey),
+           SizedBox(
+            width: 10,
           ),
-        ),
-      ],
+          Expanded(
+            child: Text(
+              'Your current location',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRowLocation({required Location location, IconData? icon,}) {
+    return Padding(
+      key: Key(location.name),
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          if(icon == null && isEdit)
+          IconButton(
+            onPressed: () {
+            GetIt.instance<RepositorySP>().removeLocation(location);
+            savedLocations.remove(location);
+            setState(() {});
+          }, icon: const Icon(Icons.delete, color: Colors.red)),
+          Icon(icon ?? Icons.location_on, color: AppColors.grey),
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Text(
+              location.name,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          if(icon == null && isEdit)
+          const Icon(Icons.list, color: AppColors.grey),
+        ],
+      ),
     );
   }
 }

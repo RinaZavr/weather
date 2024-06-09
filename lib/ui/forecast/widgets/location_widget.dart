@@ -18,7 +18,8 @@ class _LocationWidgetState extends State<LocationWidget> {
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
-          constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height - 100),
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 200),
+          isScrollControlled: true,
           barrierColor: Colors.black.withOpacity(0.8),
           context: context,
           builder: (context) => const LocationScreen(),
