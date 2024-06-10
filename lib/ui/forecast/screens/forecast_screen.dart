@@ -25,13 +25,29 @@ class _ForecastScreenState extends State<ForecastScreen> {
       RefreshController(initialRefresh: false);
   late List<List<Widget>> widgets;
   List<String> titles = ['Right now', 'This afternoon', 'This week'];
+  late WeatherCubit cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    cubit = WeatherCubit();
+    cubit.getWeather(lat: widget.lat, lon: widget.lon);
+  }
+
+  @override
+  void dispose() {
+    cubit.close();
+    _refreshController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: BlocProvider(
-        create: (context) => WeatherCubit()
-          ..getWeather(lat: widget.lat, lon: widget.lon),
+        create: (context) => cubit,
+        // create: (context) => WeatherCubit()
+        //   ..getWeather(lat: widget.lat, lon: widget.lon),
         child: BlocBuilder<WeatherCubit, WeatherState>(
           builder: (context, state) {
             if (state is WeatherLoading) {
@@ -73,12 +89,13 @@ class _ForecastScreenState extends State<ForecastScreen> {
                 ],
               ];
               return Scaffold(
-                backgroundColor: Colors.transparent,
                 appBar: AppBar(
                   automaticallyImplyLeading: false,
-                  backgroundColor: Colors.transparent,
                   title: LocationWidget(
                     currentDay: state.currentDay,
+                    onPressed: (value) {
+                      cubit.getWeather(lat: value['lat'], lon: value['lon']);
+                    },
                   ),
                 ),
                 body: SmartRefresher(

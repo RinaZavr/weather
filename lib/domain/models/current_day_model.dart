@@ -3,7 +3,7 @@ import 'package:weather/domain/models/location_model.dart';
 import 'package:weather/domain/models/week_day_model.dart';
 
 class CurrentDay {
-  final Location location;
+  final LocationInfo location;
   final double tempC;
   final double tempF;
   final String description;
@@ -45,7 +45,7 @@ class CurrentDay {
   });
 
   CurrentDay.fromJson(Map<String, dynamic> json)
-      : location = Location.fromJson(json['location']),
+      : location = LocationInfo.fromJson(json['location']),
         tempC = json['current']['temp_c'],
         tempF = json['current']['temp_f'],
         description = json['current']['condition']['text'],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:theme_provider/theme_provider.dart';
 import 'package:weather/domain/models/current_day_model.dart';
 import 'package:weather/ui/forecast/widgets/image_widget.dart';
 
@@ -13,10 +14,7 @@ class NowMinInfoWidget extends StatelessWidget {
       children: [
         Text(
           '${day.description}.',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-          ),
+          style: ThemeProvider.controllerOf(context).theme.data.textTheme.titleMedium,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
@@ -31,19 +29,11 @@ class NowMinInfoWidget extends StatelessWidget {
                 children: [
                   Text(
                     '${day.tempC.toStringAsFixed(0)}°',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 45,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: ThemeProvider.controllerOf(context).theme.data.textTheme.bodyLarge,
                   ),
                   Text(
                     'Feels like ${day.feelslikeC.toStringAsFixed(0)}°',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: ThemeProvider.controllerOf(context).theme.data.textTheme.bodyMedium,
                   ),
                 ],
               ),

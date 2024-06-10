@@ -7,7 +7,7 @@ final class SearchInitial extends SearchState {}
 final class SearchLoading extends SearchState {}
 
 final class SearchLoaded extends SearchState {
-  final List<Location> cities;
+  final List<LocationInfo> cities;
   SearchLoaded({required this.cities});
 }
 

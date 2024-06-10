@@ -1,5 +1,7 @@
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
+import 'package:theme_provider/theme_provider.dart';
+import 'package:weather/utils/consts/color_consts.dart';
 
 class CarouselTemplateWidget extends StatefulWidget {
   final String title;
@@ -28,19 +30,12 @@ class _CarouselTemplateWidgetState extends State<CarouselTemplateWidget> {
       children: [
         Text(
           widget.title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 28,
-            fontWeight: FontWeight.w600,
-          ),
+          style: ThemeProvider.controllerOf(context).theme.data.textTheme.titleLarge,
         ),
         if (widget.description.isNotEmpty)
           Text(
             widget.description,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
+            style: ThemeProvider.controllerOf(context).theme.data.textTheme.titleMedium,
           ),
         ExpandablePageView(
           onPageChanged: (value) => setState(() => curIndex = value),
@@ -61,8 +56,8 @@ class _CarouselTemplateWidgetState extends State<CarouselTemplateWidget> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: curIndex == i
-                      ? const Color.fromARGB(255, 77, 77, 77)
-                      : const Color.fromARGB(255, 46, 46, 46),
+                      ? AppColors.carouselDotSelect
+                      : AppColors.carouselDotUnselect
                 ),
               ),
           ],

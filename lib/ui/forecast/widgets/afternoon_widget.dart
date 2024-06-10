@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:theme_provider/theme_provider.dart';
 import 'package:weather/domain/models/hour_model.dart';
 import 'package:weather/ui/forecast/widgets/image_widget.dart';
 import 'package:weather/utils/consts/color_consts.dart';
@@ -47,21 +48,14 @@ class _AfternoonWidgetState extends State<AfternoonWidget> {
                   ),
                   child: Text(
                     '${hour.tempC.toStringAsFixed(0)}°',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: ThemeProvider.controllerOf(context).theme.data.textTheme.titleSmall,
                   ),
                 ),
                 SizedBox(
                   height: 25,
                   child: Text(
                     '${hour.time.hour.toString().padLeft(2, '0')}:${hour.time.minute.toString().padLeft(2, '0')}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
+                    style: ThemeProvider.controllerOf(context).theme.data.textTheme.labelMedium,
                   ),
                 ),
                 Container(
@@ -70,7 +64,8 @@ class _AfternoonWidgetState extends State<AfternoonWidget> {
                       left: 2,
                       right: 2,
                       bottom: (widget.maxHumidity / 3 + 50) -
-                          (hour.humidity / 3 + 50)),
+                          (hour.humidity / 3 + 50),
+                          ),
                   padding: const EdgeInsets.only(top: 4),
                   height: hour.humidity / 3 + 50,
                   width: MediaQuery.of(context).size.width / 8 - 6,
@@ -87,10 +82,7 @@ class _AfternoonWidgetState extends State<AfternoonWidget> {
                       ImageWidget(icon: hour.icon, width: 30),
                       Text(
                         '${hour.humidity}%',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                        ),
+                        style: ThemeProvider.controllerOf(context).theme.data.textTheme.titleSmall,
                       ),
                     ],
                   ),

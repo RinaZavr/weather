@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather/utils/consts/color_consts.dart';
 
 class ImageWidget extends StatelessWidget {
   final String icon;
@@ -10,7 +11,7 @@ class ImageWidget extends StatelessWidget {
     return Container(
       width: width,
       decoration: const BoxDecoration(
-        color: Colors.grey,
+        color: AppColors.grey,
         shape: BoxShape.circle,
       ),
       child: Image.network(

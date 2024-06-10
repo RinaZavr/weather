@@ -11,7 +11,7 @@ class SearchCubit extends Cubit<SearchState> {
   void search(String query) async {
     try {
       emit(SearchLoading());
-      List<Location> locations =
+      List<LocationInfo> locations =
           await GetIt.instance.get<NetworkService>().searchLocation(q: query);
       if (locations.isEmpty) {
         emit(SearchError(message: 'Город не найден'));

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:weather/ui/forecast/screens/forecast_screen.dart';
 import 'package:weather/ui/location/screens/location_screen.dart';
 import 'package:weather/ui/settings/screens/settings_screen.dart';
-import 'package:weather/utils/consts/color_consts.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -13,23 +12,13 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 1;
-  late Widget curPage;
-  List<Widget> pages = const [
-    LocationScreen(),
-    ForecastScreen(),
-    SettingScreen()
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: pages.elementAt(selectedIndex),
+      body: ForecastScreen(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
-        selectedItemColor: AppColors.yellow,
-        unselectedItemColor: AppColors.grey,
-        backgroundColor: AppColors.darkGrey,
         onTap: _onTap,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -56,8 +45,22 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _onTap(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
+    if(index == 0) {
+      showModalBottomSheet(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 200),
+          isScrollControlled: true,
+          barrierColor: Colors.black.withOpacity(0.8),
+          context: context,
+          builder: (context) => const LocationScreen(),
+        );
+    } else if(index == 2) {
+      showModalBottomSheet(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 200),
+          isScrollControlled: true,
+          barrierColor: Colors.black.withOpacity(0.8),
+          context: context,
+          builder: (context) => const SettingScreen(),
+        );
+    }
   }
 }

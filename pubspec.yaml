@@ -41,6 +41,8 @@ dependencies:
   get_it: ^7.7.0
   share_plus: ^9.0.0
   shared_preferences: ^2.2.3
+  theme_provider: ^0.6.0
+  themed: ^5.0.3
 
 dev_dependencies:
   flutter_test:

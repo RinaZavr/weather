@@ -1,17 +1,17 @@
-class Location {
+class LocationInfo {
   final String name;
   final String country;
   final String region;
   final double lat;
   final double lon;
-  Location(
+  LocationInfo(
       {required this.name,
       required this.country,
       required this.region,
       required this.lat,
       required this.lon});
 
-  Location.fromJson(Map<String, dynamic> json) :
+  LocationInfo.fromJson(Map<String, dynamic> json) :
         name = json['name'],
         country = json['country'],
         region = json['region'],

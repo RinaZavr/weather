@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:theme_provider/theme_provider.dart';
 import 'package:weather/domain/models/week_day_model.dart';
 import 'package:weather/ui/forecast/widgets/image_widget.dart';
+import 'package:weather/ui/forecast/widgets/week_date_widget.dart';
 
 class WeekDetailWidget extends StatefulWidget {
   final List<WeekDay> week;
@@ -25,25 +26,7 @@ class _WeekDetailWidgetState extends State<WeekDetailWidget> {
                 children: [
                   SizedBox(
                     width: 40,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          DateFormat('EEE').format(week.date).toUpperCase(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
-                        Text(
-                          week.date.day.toString(),
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 10,
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: WeekDateWidget(date: week.date,),
                   ),
                   ImageWidget(icon: week.icon, width: 30),
                   const SizedBox(
@@ -51,10 +34,7 @@ class _WeekDetailWidgetState extends State<WeekDetailWidget> {
                   ),
                   Text(
                     '${week.description}. ${week.windKph}km/h winds.',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                    ),
+                    style: ThemeProvider.controllerOf(context).theme.data.textTheme.labelLarge,
                   ),
                 ],
               ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Hour {
-  final TimeOfDay time;
+  TimeOfDay time;
   final double tempC;
   final double tempF;
   final String icon;

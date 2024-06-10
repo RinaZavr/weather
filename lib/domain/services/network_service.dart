@@ -15,12 +15,12 @@ class NetworkService {
         : null;
   }
 
-  Future<List<Location>> searchLocation({String q = 'Omsk'}) async {
+  Future<List<LocationInfo>> searchLocation({String q = 'Omsk'}) async {
     var response = await dio.get('$_address/search.json?key=$key&q=$q');
-    List<Location> locations = [];
+    List<LocationInfo> locations = [];
     if (response.statusCode == 200) {
       for (var element in response.data) {
-        locations.add(Location.fromJson(element));
+        locations.add(LocationInfo.fromJson(element));
       }
     }
     return locations;

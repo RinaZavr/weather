@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:theme_provider/theme_provider.dart';
 import 'package:weather/domain/models/week_day_model.dart';
 import 'package:weather/ui/forecast/widgets/image_widget.dart';
+import 'package:weather/ui/forecast/widgets/week_date_widget.dart';
 import 'package:weather/utils/consts/color_consts.dart';
 
 class WeekWidget extends StatefulWidget {
@@ -49,11 +50,7 @@ class _WeekWidgetState extends State<WeekWidget> {
                         children: [
                           Text(
                             '${widget.week[index].humidity.toStringAsFixed(0)}%',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: ThemeProvider.controllerOf(context).theme.data.textTheme.titleSmall,
                           ),
                           ImageWidget(icon: widget.week[index].icon, width: 30),
                         ],
@@ -63,26 +60,7 @@ class _WeekWidgetState extends State<WeekWidget> {
                 ),
                 SizedBox(
                   width: 45,
-                  child: Column(
-                    children: [
-                      Text(
-                        DateFormat('EEE')
-                            .format(widget.week[index].date)
-                            .toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
-                      ),
-                      Text(
-                        widget.week[index].date.day.toString(),
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: WeekDateWidget(date: widget.week[index].date,),
                 ),
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -110,11 +88,7 @@ class _WeekWidgetState extends State<WeekWidget> {
                             width: 30,
                             child: Text(
                               '${widget.week[index].minTempC.toStringAsFixed(0)}°',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: ThemeProvider.controllerOf(context).theme.data.textTheme.titleSmall,
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -122,11 +96,7 @@ class _WeekWidgetState extends State<WeekWidget> {
                             padding: const EdgeInsets.only(right: 4),
                             child: Text(
                               '${widget.week[index].maxTempC.toStringAsFixed(0)}°',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: ThemeProvider.controllerOf(context).theme.data.textTheme.titleSmall,
                             ),
                           ),
                         ],
