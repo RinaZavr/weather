@@ -28,11 +28,11 @@ class NowMinInfoWidget extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    '${day.tempC.toStringAsFixed(0)}°',
+                    '${day.temp.toStringAsFixed(0)}°',
                     style: ThemeProvider.controllerOf(context).theme.data.textTheme.bodyLarge,
                   ),
                   Text(
-                    'Feels like ${day.feelslikeC.toStringAsFixed(0)}°',
+                    'Feels like ${day.feelslike.toStringAsFixed(0)}°',
                     style: ThemeProvider.controllerOf(context).theme.data.textTheme.bodyMedium,
                   ),
                 ],

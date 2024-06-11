@@ -11,11 +11,12 @@ class Utils {
 
     for (var element in week) {
       info[element.description] = (info[element.description] ?? 0) + 1;
-      temps.add(element.maxTempC.ceil());
+      temps.add(element.maxTemp.ceil());
     }
     int maxInfo = info.values.reduce(max);
     int maxTemp = temps.reduce(max);
-    String maxInfoKey = info.keys.firstWhere((element) => info[element] == maxInfo);
+    String maxInfoKey =
+        info.keys.firstWhere((element) => info[element] == maxInfo);
     return '$maxInfoKey for most of the week, with highs in the $maxTemp°s all week';
   }
 
@@ -59,7 +60,7 @@ class Utils {
   }
 
   static String getHumidityText(int humidity) {
-    switch(humidity) {
+    switch (humidity) {
       case <= 10:
         return 'Feels dry';
       case <= 20:
@@ -86,11 +87,14 @@ class Utils {
   }
 
   static double getMaxTemp(List<Hour> list) {
-    return list.reduce((a, b) => a.tempC > b.tempC ? a : b).tempC;
+    return list.reduce((a, b) => a.temp > b.temp ? a : b).temp;
   }
 
   static double getMaxHumidity(List<Hour> list) {
-    return list.reduce((a, b) => a.humidity > b.humidity ? a : b).humidity.toDouble();
+    return list
+        .reduce((a, b) => a.humidity > b.humidity ? a : b)
+        .humidity
+        .toDouble();
   }
 
   static String getWindImage(String dir) {
@@ -136,7 +140,7 @@ class Utils {
   }
 
   static String getUVImage(double uv) {
-    if(uv < 11) {
+    if (uv < 11) {
       return 'assets/uv/${uv.toInt()}.png';
     }
     return 'assets/uv/11.png';

@@ -33,7 +33,7 @@ class _WeekDetailWidgetState extends State<WeekDetailWidget> {
                     width: 10,
                   ),
                   Text(
-                    '${week.description}. ${week.windKph}km/h winds.',
+                    '${week.description}. ${week.wind}km/h winds.',
                     style: ThemeProvider.controllerOf(context).theme.data.textTheme.labelLarge,
                   ),
                 ],

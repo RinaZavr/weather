@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:location/location.dart';
 import 'package:weather/domain/models/current_day_model.dart';
+import 'package:weather/domain/services/location_service.dart';
 import 'package:weather/domain/services/network_service.dart';
 
 part 'weather_state.dart';
@@ -10,11 +10,11 @@ part 'weather_state.dart';
 class WeatherCubit extends Cubit<WeatherState> {
   WeatherCubit() : super(WeatherInitial());
 
-  void getWeather({double? lat, double? lon}) async {
+  void getWeather() async {
     try {
       emit(WeatherLoading());
-      CurrentDay data = (await GetIt.instance.get<NetworkService>().getCurrentDay(
-          q: '${lat ?? GetIt.instance.get<LocationData>().latitude ?? 0},${lon ?? GetIt.instance.get<LocationData>().longitude ?? 0}'))!;
+      CurrentDay data = (await GetIt.I.get<NetworkService>().getCurrentDay(
+          q: '${GetIt.I.get<LocationService>().currentLocation.latitude ?? 0},${GetIt.I.get<LocationService>().currentLocation.longitude ?? 0}'))!;
       data.hours
           .removeWhere((element) => element.time.hour < TimeOfDay.now().hour);
       if (data.hours.length < 16) {

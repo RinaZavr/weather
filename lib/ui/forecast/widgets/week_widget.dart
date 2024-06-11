@@ -70,10 +70,10 @@ class _WeekWidgetState extends State<WeekWidget> {
                     child: Container(
                       margin: const EdgeInsets.symmetric(vertical: 2),
                       height: 300 / 8,
-                      width: widget.week[index].minTempC * 4 + 38,
-                      decoration: const BoxDecoration(
-                        color: AppColors.yellow,
-                        borderRadius: BorderRadius.only(
+                      width: widget.week[index].maxTemp > 50 ? widget.week[index].maxTemp + 38 : widget.week[index].maxTemp * 2 + 38,
+                      decoration: BoxDecoration(
+                        color: ThemeProvider.controllerOf(context).theme.data.primaryColorLight,
+                        borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(10),
                           bottomRight: Radius.circular(10),
                         ),
@@ -83,7 +83,7 @@ class _WeekWidgetState extends State<WeekWidget> {
                         children: [
                           Container(
                             alignment: Alignment.center,
-                            color: AppColors.darkYellow,
+                            color: ThemeProvider.controllerOf(context).theme.data.hintColor,
                             height: 300 / 8,
                             width: 30,
                             child: Text(
@@ -95,7 +95,7 @@ class _WeekWidgetState extends State<WeekWidget> {
                           Padding(
                             padding: const EdgeInsets.only(right: 4),
                             child: Text(
-                              '${widget.week[index].maxTempC.toStringAsFixed(0)}°',
+                              '${widget.week[index].maxTemp.toStringAsFixed(0)}°',
                               style: ThemeProvider.controllerOf(context).theme.data.textTheme.titleSmall,
                             ),
                           ),

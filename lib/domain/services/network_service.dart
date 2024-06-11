@@ -8,6 +8,7 @@ class NetworkService {
   final dio = Dio();
 
   Future<CurrentDay?> getCurrentDay({String q = 'Omsk'}) async {
+    print('aa: $q');
     var response =
         await dio.get('$_address/forecast.json?key=$key&q=$q&days=8');
     return response.statusCode == 200

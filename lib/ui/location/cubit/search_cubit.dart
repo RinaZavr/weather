@@ -12,7 +12,7 @@ class SearchCubit extends Cubit<SearchState> {
     try {
       emit(SearchLoading());
       List<LocationInfo> locations =
-          await GetIt.instance.get<NetworkService>().searchLocation(q: query);
+          await GetIt.I.get<NetworkService>().searchLocation(q: query);
       if (locations.isEmpty) {
         emit(SearchError(message: 'Город не найден'));
       } else {

@@ -11,18 +11,18 @@ class LocationInfo {
       required this.lat,
       required this.lon});
 
-  LocationInfo.fromJson(Map<String, dynamic> json) :
-        name = json['name'],
+  LocationInfo.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
         country = json['country'],
         region = json['region'],
         lat = json['lat'],
         lon = json['lon'];
-  
+
   Map<String, dynamic> toJson() => {
-    'name': name,
-    'country': country,
-    'region': region,
-    'lat': lat,
-    'lon': lon
-  };
+        'name': name,
+        'country': country,
+        'region': region,
+        'lat': lat,
+        'lon': lon
+      };
 }

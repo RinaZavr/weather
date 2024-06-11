@@ -20,15 +20,15 @@ class NowMaxInfoWidget extends StatelessWidget {
         buildInfo(
           context,
           Utils.getWindImage(day.windDir),
-            '${day.windKph.toStringAsFixed(0)}km/h winds from the ${Utils.getWindDir(day.windDir)}.\nVilability ${day.visKm.toStringAsFixed(0)}+ kilometers.'),
+            '${day.wind.toStringAsFixed(0)}km/h winds from the ${Utils.getWindDir(day.windDir)}.\nVilability ${day.visability.toStringAsFixed(0)}+ kilometers.'),
         buildInfo(
           context,
           Utils.getHumidityImage(day.humidity),
-            'Humidity ${day.humidity}% • Dewpoint ${day.dewpointC.toStringAsFixed(0)}°\n${Utils.getHumidityText(day.humidity)}.'),
+            'Humidity ${day.humidity}% • Dewpoint ${day.dewpoint.toStringAsFixed(0)}°\n${Utils.getHumidityText(day.humidity)}.'),
         buildInfo(
           context,
           Utils.getPressureImage(),
-          'Presure ${day.pressureMb.toStringAsFixed(0)}mb and steady.'),
+          'Presure ${day.pressure.toStringAsFixed(0)}mb and steady.'),
         buildInfo(
           context,
           Utils.getSunsetImage(),

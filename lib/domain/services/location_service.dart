@@ -4,6 +4,10 @@ class LocationService {
   LocationData locationData = LocationData.fromMap({});
   Location location = Location();
 
+  LocationData get currentLocation => locationData;
+
+  set currentLocation(LocationData location) => locationData = location;
+
   Future<LocationData> getCurrentLocation() async {
     bool serviceEnabled;
     PermissionStatus permissionGranted;
@@ -27,9 +31,6 @@ class LocationService {
     }
 
     locationData = await location.getLocation();
-    location.onLocationChanged.listen((LocationData currentLocation) {
-      locationData = currentLocation;
-    });
     return locationData;
   }
 }

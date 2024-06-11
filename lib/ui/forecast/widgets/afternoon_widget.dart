@@ -34,20 +34,20 @@ class _AfternoonWidgetState extends State<AfternoonWidget> {
                   margin: EdgeInsets.only(
                     left: 2,
                     right: 2,
-                    top: widget.maxTemp * 2 - hour.tempC * 2,
+                    top: hour.temp > 50 ? widget.maxTemp - hour.temp : widget.maxTemp * 2 - hour.temp * 2,
                   ),
                   padding: const EdgeInsets.only(top: 4),
-                  height: hour.tempC * 2,
+                  height: hour.temp > 50 ? hour.temp : hour.temp * 2,
                   width: MediaQuery.of(context).size.width / 8 - 6,
-                  decoration: const BoxDecoration(
-                    color: AppColors.yellow,
-                    borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                    color: ThemeProvider.controllerOf(context).theme.data.primaryColorLight,
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10),
                     ),
                   ),
                   child: Text(
-                    '${hour.tempC.toStringAsFixed(0)}°',
+                    '${hour.temp.toStringAsFixed(0)}°',
                     style: ThemeProvider.controllerOf(context).theme.data.textTheme.titleSmall,
                   ),
                 ),

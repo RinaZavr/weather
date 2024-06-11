@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather/ui/forecast/screens/forecast_screen.dart';
 import 'package:weather/ui/location/screens/location_screen.dart';
 import 'package:weather/ui/settings/screens/settings_screen.dart';
+import 'package:weather/utils/consts/string_consts.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -16,7 +17,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ForecastScreen(),
+      body: const ForecastScreen(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: _onTap,
@@ -25,19 +26,19 @@ class _MainPageState extends State<MainPage> {
             icon: Icon(
               Icons.location_on,
             ),
-            label: 'Location',
+            label: AppStrings.titleLocations,
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.bar_chart_outlined,
             ),
-            label: 'Forecast',
+            label: AppStrings.titleForecast,
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.settings,
             ),
-            label: 'Settings',
+            label: AppStrings.titleSettings,
           ),
         ],
       ),
@@ -45,22 +46,22 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _onTap(int index) {
-    if(index == 0) {
+    if (index == 0) {
       showModalBottomSheet(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 200),
-          isScrollControlled: true,
-          barrierColor: Colors.black.withOpacity(0.8),
-          context: context,
-          builder: (context) => const LocationScreen(),
-        );
-    } else if(index == 2) {
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 200),
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => const LocationScreen(),
+      );
+    } else if (index == 2) {
       showModalBottomSheet(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 200),
-          isScrollControlled: true,
-          barrierColor: Colors.black.withOpacity(0.8),
-          context: context,
-          builder: (context) => const SettingScreen(),
-        );
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 200),
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => const SettingScreen(),
+      );
     }
   }
 }

@@ -44,16 +44,39 @@ class LightTheme {
           color: Colors.black,
           fontSize: 13,
         ),
+        displaySmall: TextStyle(
+          color: AppColors.accentLightTheme,
+          fontSize: 15,
+        ),
       ),
+      
+      hintColor: AppColors.darkAccentLightTheme,
+      primaryColor: Colors.white,
+      primaryColorLight: AppColors.accentLightTheme,
+      primaryColorDark: AppColors.darkWhite,
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.grey,
-        selectedItemColor: AppColors.yellow,
+        backgroundColor: AppColors.darkWhite,
+        selectedItemColor: AppColors.accentLightTheme,
         unselectedItemColor: AppColors.darkGrey,
       ),
-      primaryColor: Colors.white,
       dialogBackgroundColor: Colors.white,
       progressIndicatorTheme:
           const ProgressIndicatorThemeData(color: Colors.black),
+      inputDecorationTheme: const InputDecorationTheme(
+        contentPadding: EdgeInsets.all(4),
+        border: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        hintStyle: TextStyle(
+          color: AppColors.darkGrey,
+          fontSize: 15,
+        ),
+        fillColor: AppColors.darkWhite,
+        filled: true,
+      ),
     );
   }
 }
